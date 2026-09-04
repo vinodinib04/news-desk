@@ -21,12 +21,12 @@
     "received_at": "2026-09-01T05:41:00"
   },
   {
-    "id": 4,
-    "source": "AP Newswire",
-    "headline": "Earthquake damages buildings in central Chile",
-    "content": "A separate, unrelated earthquake struck central Chile on Tuesday afternoon, damaging several older buildings near Santiago. Chile's emergency management office said crews were assessing the extent of the damage.",
-    "received_at": "2026-09-01T14:02:00"
-  },
+  "id": 4,
+  "source": "AP Newswire",
+  "headline": "Earthquake damages buildings in central Chile",
+  "content": "An earthquake struck central Chile on Tuesday afternoon, damaging several older buildings near Santiago. Chile's emergency management office said crews were assessing the extent of the damage.",
+  "received_at": "2026-09-01T14:02:00"
+},
   {
     "id": 5,
     "source": "Santiago Report",
@@ -124,5 +124,11 @@
     "headline": "Mayor's office praises approval of downtown crossing after years of setbacks",
     "content": "The mayor's office issued a statement Thursday praising Wednesday's approval of the downtown crossing, calling it a milestone after several years of budget setbacks. The statement pointed to shorter commute times for residents on the east side once construction wraps up.",
     "received_at": "2026-09-03T13:00:00"
+  } , {
+    "id": 19,
+    "source": "Sapporo News",
+    "headline": "Authorities inspect quake-hit buildings in Sapporo",
+    "content": "Authorities in Sapporo began inspections of buildings after Tuesday's earthquake. Crews were checking older structures in the city for damage and safety concerns.",
+    "received_at": "2026-09-01T06:30:00"
   }
 ]
