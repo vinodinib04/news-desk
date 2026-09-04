@@ -18,10 +18,6 @@ The main workflow is:
 
 The application focuses on reducing duplicate work while keeping the final editorial decision with the editor.
 
----
-
-## Key Features
-
 ## Key Features
 
 * Groups duplicate news items into one story
@@ -74,7 +70,6 @@ With more time, I would improve the grouping by incorporating additional signals
 * Semantic similarity
 * A larger labelled evaluation dataset
 
----
 
 # Editorial Workflow
 
@@ -98,7 +93,6 @@ The editor has final publishing authority.
 
 The desk head can see what has been published and review publication turnaround.
 
----
 
 ## Important Product Decisions
 
@@ -135,7 +129,6 @@ This demonstrates both duplicate grouping and avoiding incorrect merges.
 * `static/` — frontend assets
 * `requirements.txt` — Python dependencies
 
----
 
 # AI Tools Used
 
@@ -148,8 +141,6 @@ I used **Claude** during development for:
 * UX improvements
 
 I used AI as a development assistant, while making the product decisions, workflow decisions, assumptions, and trade-offs for the implementation.
-
----
 
 ## Challenges
 
