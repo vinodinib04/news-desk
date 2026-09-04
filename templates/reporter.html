@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block title %}Reporter desk &middot; News Brief Desk{% endblock %}
+
+{% block content %}
+<section class="page-head">
+    <h1>Reporter desk</h1>
+    <p>Grouped stories waiting for a draft. Open one to see its sources and write the brief.</p>
+</section>
+
+<section class="story-column">
+    <h2 class="column-title">Needs a draft <span class="count-badge">{{ draft_stories|length }}</span></h2>
+    {% if draft_stories %}
+        <div class="story-grid">
+            {% for story in draft_stories %}
+            <div class="story-card">
+                <a href="{{ url_for('reporter_story', story_id=story.id) }}" class="story-card-link">
+                    <span class="tag tag-{{ story.category|lower }}">{{ story.category }}</span>
+                    <h3>{{ story.title }}</h3>
+                    <p class="story-meta">{{ story.sources_count }} source{{ 's' if story.sources_count != 1 }}</p>
+                    {% if story.editor_note %}<p class="story-meta">&#8617; sent back by editor</p>{% endif %}
+                </a>
+                {% if current_role == 'reporter' %}
+                <div class="story-card-foot">
+                    <form method="POST" action="{{ url_for('reporter_delete', story_id=story.id) }}"
+                          onsubmit="return confirm('Discard this item? This can\'t be undone.');">
+                        <button type="submit" class="btn btn-danger btn-small">Discard</button>
+                    </form>
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="empty-state">Nothing waiting &mdash; the incoming pile is clear.</p>
+    {% endif %}
+</section>
+
+<section class="story-column">
+    <h2 class="column-title">Sent to editor <span class="count-badge">{{ submitted_stories|length }}</span></h2>
+    {% if submitted_stories %}
+        <div class="story-grid">
+            {% for story in submitted_stories %}
+            <a href="{{ url_for('reporter_story', story_id=story.id) }}" class="story-card story-card-muted">
+                <span class="tag tag-{{ story.category|lower }}">{{ story.category }}</span>
+                <h3>{{ story.title }}</h3>
+                <p class="story-meta">Submitted &middot; waiting on editor</p>
+            </a>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="empty-state">Nothing currently in review.</p>
+    {% endif %}
+</section>
+
+<section class="story-column">
+    <h2 class="column-title">Already published <span class="count-badge">{{ published_stories|length }}</span></h2>
+    {% if published_stories %}
+        <div class="story-grid">
+            {% for story in published_stories %}
+            <a href="{{ url_for('reporter_story', story_id=story.id) }}" class="story-card story-card-locked">
+                <span class="tag tag-{{ story.category|lower }}">{{ story.category }}</span>
+                <h3>{{ story.title }}</h3>
+                <p class="story-meta">🔒 Locked</p>
+            </a>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="empty-state">Nothing published yet.</p>
+    {% endif %}
+</section>
+{% endblock %}

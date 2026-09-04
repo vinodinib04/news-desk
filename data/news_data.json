@@ -1,0 +1,128 @@
+[
+  {
+    "id": 1,
+    "source": "Reuters Wire",
+    "headline": "Magnitude 6.4 earthquake strikes northern Japan",
+    "content": "A magnitude 6.4 earthquake struck northern Japan early Tuesday, the Japan Meteorological Agency said. Local authorities reported no immediate deaths, though several homes in Hokkaido lost power. A tsunami advisory was briefly issued and later lifted.",
+    "received_at": "2026-09-01T05:12:00"
+  },
+  {
+    "id": 2,
+    "source": "Tokyo Daily",
+    "headline": "Strong quake felt across Hokkaido, no major damage reported",
+    "content": "Residents across Hokkaido described powerful shaking early Tuesday morning after a magnitude 6.4 earthquake hit the region. Train services were briefly suspended as crews inspected the tracks. Officials say there is no major structural damage so far.",
+    "received_at": "2026-09-01T05:19:00"
+  },
+  {
+    "id": 3,
+    "source": "North Japan Blog",
+    "headline": "Big morning shake wakes up northern Japan",
+    "content": "People across northern Japan woke up to a powerful earthquake early Tuesday. Several posts on social media described items falling from shelves in Sapporo. Emergency services have not reported casualties.",
+    "received_at": "2026-09-01T05:41:00"
+  },
+  {
+    "id": 4,
+    "source": "AP Newswire",
+    "headline": "Earthquake damages buildings in central Chile",
+    "content": "A separate, unrelated earthquake struck central Chile on Tuesday afternoon, damaging several older buildings near Santiago. Chile's emergency management office said crews were assessing the extent of the damage.",
+    "received_at": "2026-09-01T14:02:00"
+  },
+  {
+    "id": 5,
+    "source": "Santiago Report",
+    "headline": "Moderate quake rattles Santiago region, some buildings damaged",
+    "content": "A moderate earthquake was felt across the Santiago metropolitan region on Tuesday, cracking walls in at least two older buildings. Emergency crews are inspecting affected structures near the capital.",
+    "received_at": "2026-09-01T14:20:00"
+  },
+  {
+    "id": 6,
+    "source": "Market Wire",
+    "headline": "Central bank cuts benchmark interest rate by 25 basis points",
+    "content": "The central bank cut its benchmark interest rate by 25 basis points on Thursday, citing moderating inflation and softer job growth. It is the second cut this year.",
+    "received_at": "2026-09-02T09:03:00"
+  },
+  {
+    "id": 7,
+    "source": "Financial Daily",
+    "headline": "Policymakers lower interest rates as inflation cools",
+    "content": "Officials reduced the benchmark interest rate by a quarter percentage point on Thursday as recent inflation figures showed further signs of easing. Markets had widely expected the move.",
+    "received_at": "2026-09-02T09:11:00"
+  },
+  {
+    "id": 8,
+    "source": "Economy Today",
+    "headline": "Rate cut announced by central bank amid slowing inflation",
+    "content": "The country's central bank announced a 25-basis-point rate cut on Thursday. The bank's governor said the decision reflects confidence that inflation is returning toward target.",
+    "received_at": "2026-09-02T09:34:00"
+  },
+  {
+    "id": 9,
+    "source": "Tech Wire",
+    "headline": "NovaTech unveils Halo 5 smartphone with new camera system",
+    "content": "NovaTech introduced its Halo 5 smartphone on Wednesday, featuring a redesigned camera system, longer battery life and a lower starting price than its predecessor. Pre-orders open next week.",
+    "received_at": "2026-09-02T16:05:00"
+  },
+  {
+    "id": 10,
+    "source": "Digital Review",
+    "headline": "NovaTech launches flagship Halo 5 handset",
+    "content": "Technology company NovaTech launched its new flagship phone, the Halo 5, with an upgraded camera and improved battery. Reviewers say the price cut is meant to compete more directly with rival handsets.",
+    "received_at": "2026-09-02T16:22:00"
+  },
+  {
+    "id": 11,
+    "source": "City Council Press Office",
+    "headline": "Council approves funding for new river bridge",
+    "content": "The city council voted 7-2 on Wednesday to approve funding for a new pedestrian bridge across the river, with construction expected to begin next spring. Officials said the project had been delayed twice over budget concerns.",
+    "received_at": "2026-09-02T18:40:00"
+  },
+  {
+    "id": 12,
+    "source": "Regional Herald",
+    "headline": "Bridge project gets green light after years of delay",
+    "content": "After two years of delays, the city council has approved funding for a pedestrian bridge project. Construction is expected to start in spring, according to a statement released Wednesday evening.",
+    "received_at": "2026-09-02T19:05:00"
+  },
+  {
+    "id": 13,
+    "source": "Sports Wire",
+    "headline": "Home side wins thriller in last-over finish",
+    "content": "The home side won a tightly fought cricket match by three wickets off the final ball on Wednesday night, chasing down a target of 214. The visiting captain called it one of the closest games of the season.",
+    "received_at": "2026-09-02T21:15:00"
+  },
+  {
+    "id": 14,
+    "source": "Sunday Sports Desk",
+    "headline": "Last-ball six seals dramatic win for home team",
+    "content": "A last-ball six sealed a dramatic three-wicket victory for the home team on Wednesday, capping a chase of 214. Fans stayed well past midnight to celebrate outside the stadium.",
+    "received_at": "2026-09-02T21:50:00"
+  },
+  {
+    "id": 15,
+    "source": "National Wire",
+    "headline": "Parliament to debate new education funding bill next week",
+    "content": "Lawmakers are set to debate a new education funding bill next week that would increase spending on rural schools. The education minister said the bill has support from both major parties.",
+    "received_at": "2026-09-03T08:12:00"
+  },
+  {
+    "id": 16,
+    "source": "Capital Press",
+    "headline": "Local elections set for early next year, commission confirms",
+    "content": "The election commission confirmed on Wednesday that local elections will be held in early January, several weeks earlier than originally planned. Candidate registration opens next month.",
+    "received_at": "2026-09-03T10:30:00"
+  },
+  {
+    "id": 17,
+    "source": "Weekend Voice",
+    "headline": "Farmers report driest August in over a decade",
+    "content": "Farmers in the eastern growing region say this August was the driest in more than ten years, raising concerns about the upcoming harvest. Agricultural officials say water rationing may be extended into autumn.",
+    "received_at": "2026-09-03T11:05:00"
+  },
+  {
+    "id": 18,
+    "source": "Mayor's Press Office",
+    "headline": "Mayor's office praises approval of downtown crossing after years of setbacks",
+    "content": "The mayor's office issued a statement Thursday praising Wednesday's approval of the downtown crossing, calling it a milestone after several years of budget setbacks. The statement pointed to shorter commute times for residents on the east side once construction wraps up.",
+    "received_at": "2026-09-03T13:00:00"
+  }
+]

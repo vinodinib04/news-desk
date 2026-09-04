@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Editor desk &middot; News Brief Desk{% endblock %}
+
+{% block content %}
+<section class="page-head">
+    <h1>Editor desk</h1>
+    <p>Stories a reporter has submitted. Rewrite as needed, then publish.</p>
+</section>
+
+<section class="story-column">
+    <h2 class="column-title">Review queue <span class="count-badge">{{ queue|length }}</span></h2>
+    {% if queue %}
+        <div class="story-grid">
+            {% for story in queue %}
+            <a href="{{ url_for('editor_story', story_id=story.id) }}" class="story-card">
+                <span class="tag tag-{{ story.category|lower }}">{{ story.category }}</span>
+                <h3>{{ story.title }}</h3>
+                <p class="story-meta">{{ story.sources_count }} source{{ 's' if story.sources_count != 1 }}</p>
+            </a>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="empty-state">Review queue is empty.</p>
+    {% endif %}
+</section>
+
+<section class="story-column">
+    <h2 class="column-title">Published <span class="count-badge">{{ published_stories|length }}</span></h2>
+    {% if published_stories %}
+        <div class="story-grid">
+            {% for story in published_stories %}
+            <a href="{{ url_for('editor_story', story_id=story.id) }}" class="story-card story-card-locked">
+                <span class="tag tag-{{ story.category|lower }}">{{ story.category }}</span>
+                <h3>{{ story.title }}</h3>
+                <p class="story-meta">🔒 Published {{ story.published_at[:16] if story.published_at else '' }}</p>
+            </a>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="empty-state">Nothing published yet.</p>
+    {% endif %}
+</section>
+{% endblock %}

@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+{% block title %}Desk head dashboard &middot; News Brief Desk{% endblock %}
+
+{% block content %}
+<section class="page-head">
+    <h1>Desk head dashboard</h1>
+    <p>What went out, on what subjects, and how fast.</p>
+</section>
+
+<section class="stat-row">
+    <div class="stat-card">
+        <span class="stat-number">{{ published_count }}</span>
+        <span class="stat-label">Published stories</span>
+    </div>
+    <div class="stat-card">
+        <span class="stat-number">{{ average_minutes }}</span>
+        <span class="stat-label">Avg. minutes, first item to publish</span>
+    </div>
+    <div class="stat-card">
+        <span class="stat-number">{{ in_review_count }}</span>
+        <span class="stat-label">Currently with editor</span>
+    </div>
+    <div class="stat-card">
+        <span class="stat-number">{{ draft_count }}</span>
+        <span class="stat-label">Currently with reporters</span>
+    </div>
+</section>
+
+<section class="panel">
+    <h2>By subject</h2>
+    {% if subjects %}
+        <div class="bar-chart">
+            {% set max_count = subjects.values()|max %}
+            {% for category, count in subjects.items() %}
+            <div class="bar-row">
+                <span class="bar-label">{{ category }}</span>
+                <div class="bar-track">
+                    <div class="bar-fill tag-{{ category|lower }}" style="width: {{ (count / max_count * 100)|round }}%"></div>
+                </div>
+                <span class="bar-count">{{ count }}</span>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="empty-state">Nothing published yet.</p>
+    {% endif %}
+</section>
+
+<section class="panel">
+    <h2>Manage stories</h2>
+    <form method="GET" class="status-select-form">
+        <label for="view-select">Show</label>
+        <select id="view-select" name="view" onchange="this.form.submit()">
+            <option value="all" {{ 'selected' if view_filter == 'all' }}>All statuses</option>
+            <option value="DRAFT" {{ 'selected' if view_filter == 'DRAFT' }}>With reporters (draft)</option>
+            <option value="IN_REVIEW" {{ 'selected' if view_filter == 'IN_REVIEW' }}>With editor (in review)</option>
+            <option value="PUBLISHED" {{ 'selected' if view_filter == 'PUBLISHED' }}>Published</option>
+            <option value="MERGED" {{ 'selected' if view_filter == 'MERGED' }}>Merged</option>
+        </select>
+    </form>
+
+    {% if all_stories %}
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Story</th>
+                    <th>Subject</th>
+                    <th>Status</th>
+                    <th>First seen</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for story in all_stories %}
+                <tr>
+                    <td>
+                        {% if story.status == 'PUBLISHED' %}
+                            <a href="{{ url_for('editor_story', story_id=story.id) }}">{{ story.title }}</a>
+                        {% else %}
+                            <a href="{{ url_for('reporter_story', story_id=story.id) }}">{{ story.title }}</a>
+                        {% endif %}
+                    </td>
+                    <td><span class="tag tag-{{ story.category|lower }}">{{ story.category }}</span></td>
+                    <td><span class="status-pill status-{{ story.status|lower }}">{{ story.status.replace('_', ' ')|title }}</span></td>
+                    <td>{{ story.created_at[:16] }}</td>
+                    <td>
+                        {% if story.status != 'PUBLISHED' and current_role == 'desk_head' %}
+                        <form method="POST" action="{{ url_for('dashboard_delete', story_id=story.id) }}"
+                              onsubmit="return confirm('Delete this story permanently?');">
+                            <input type="hidden" name="view" value="{{ view_filter }}">
+                            <button type="submit" class="btn btn-danger btn-small">Delete</button>
+                        </form>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p class="empty-state">Nothing in this status right now.</p>
+    {% endif %}
+</section>
+
+<section class="panel">
+    <h2>Published stories</h2>
+    {% if rows %}
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Story</th>
+                    <th>Subject</th>
+                    <th>Published</th>
+                    <th>Turnaround</th>
+                    <th>Post-publish updates</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in rows %}
+                <tr>
+                    <td><a href="{{ url_for('editor_story', story_id=row.story.id) }}">{{ row.story.title }}</a></td>
+                    <td><span class="tag tag-{{ row.story.category|lower }}">{{ row.story.category }}</span></td>
+                    <td>{{ row.story.published_at[:16] }}</td>
+                    <td>{{ row.minutes ~ ' min' if row.minutes is not none else '—' }}</td>
+                    <td>{{ row.merges_after if row.merges_after else '—' }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p class="empty-state">Nothing published yet.</p>
+    {% endif %}
+</section>
+{% endblock %}

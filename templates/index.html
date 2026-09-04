@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}News Brief Desk{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <h1>One brief per real story.</h1>
+    <p class="hero-sub">
+        Raw copy comes in all day from wire services, press offices and blogs.
+        Most of it repeats. This is where it gets grouped, drafted, checked,
+        and published &mdash; once.
+    </p>
+</section>
+
+<section class="pipeline">
+    <div class="pipeline-step">
+        <span class="pipeline-count">{{ counts.DRAFT }}</span>
+        <span class="pipeline-label">Awaiting a reporter</span>
+        <p>Grouped from raw copy, not yet drafted or sent on.</p>
+        <a href="{{ url_for('reporter') }}" class="btn btn-ghost">Open reporter desk &rarr;</a>
+    </div>
+
+    <div class="pipeline-step">
+        <span class="pipeline-count">{{ counts.IN_REVIEW }}</span>
+        <span class="pipeline-label">Waiting on an editor</span>
+        <p>Drafted and submitted, sitting in the review queue.</p>
+        <a href="{{ url_for('editor') }}" class="btn btn-ghost">Open editor desk &rarr;</a>
+    </div>
+
+    <div class="pipeline-step">
+        <span class="pipeline-count">{{ counts.PUBLISHED }}</span>
+        <span class="pipeline-label">Published</span>
+        <p>Live, locked, and counted on the desk head's dashboard.</p>
+        <a href="{{ url_for('dashboard') }}" class="btn btn-ghost">Open dashboard &rarr;</a>
+    </div>
+</section>
+
+<section class="how-it-works">
+    <h2>How a story moves through the desk</h2>
+    <ol class="steps">
+        <li><strong>In:</strong> raw items arrive and get grouped automatically when their wording overlaps enough to likely be the same event.</li>
+        <li><strong>Reporter:</strong> reviews the grouped sources, writes or edits the brief, and can fold in an item the grouping missed &mdash; then submits it.</li>
+        <li><strong>Editor:</strong> rewrites as needed and publishes. A reporter account can never do this step.</li>
+        <li><strong>Published:</strong> the brief is locked. If a duplicate turns up later, it gets linked to the published story as a source &mdash; the published text and time never change.</li>
+    </ol>
+    <p class="note">
+        This prototype simulates roles with the switcher in the top right instead of real logins,
+        but every publish and merge action is still checked server-side against the acting role.
+    </p>
+</section>
+{% endblock %}

@@ -1,0 +1,192 @@
+{% extends "base.html" %}
+{% block title %}{{ story.title }} &middot; News Brief Desk{% endblock %}
+
+{% block content %}
+{% set can_edit = current_role == view %}
+<a href="{{ url_for('reporter') if view == 'reporter' else url_for('editor') }}" class="back-link">&larr; Back to {{ 'reporter' if view == 'reporter' else 'editor' }} desk</a>
+
+<section class="story-header">
+    <span class="tag tag-{{ story.category|lower }}">{{ story.category }}</span>
+    <span class="status-pill status-{{ story.status|lower }}">
+        {% if story.status == 'PUBLISHED' %}🔒 Published{% elif story.status == 'IN_REVIEW' %}In review{% elif story.status == 'MERGED' %}Merged into #{{ story.merged_into_id }}{% else %}Draft{% endif %}
+    </span>
+    <h1>{{ story.title }}</h1>
+    <p class="story-submeta">
+        First seen {{ story.created_at[:16] }}
+        {% if story.submitted_at %} &middot; submitted {{ story.submitted_at[:16] }}{% endif %}
+        {% if story.published_at %} &middot; published {{ story.published_at[:16] }}{% endif %}
+    </p>
+</section>
+
+<div class="story-layout">
+
+    <div class="story-main">
+
+        {% if story.status == 'PUBLISHED' %}
+            <div class="panel">
+                <h2>Published brief</h2>
+                <p class="locked-text">{{ story.final_text }}</p>
+            </div>
+        {% elif view == 'reporter' and story.status == 'DRAFT' %}
+            <div class="panel">
+                <h2>Draft</h2>
+                {% if story.editor_note %}
+                <div class="editor-note">
+                    <strong>Sent back by the editor:</strong>
+                    {{ story.editor_note }}
+                </div>
+                {% endif %}
+                {% if can_edit %}
+                <form method="POST" action="{{ url_for('reporter_save', story_id=story.id) }}">
+                    <textarea name="draft" rows="6">{{ story.draft }}</textarea>
+                    <div class="form-actions">
+                        <button type="submit" name="action" value="save" class="btn btn-secondary">Save draft</button>
+                        <button type="submit" name="action" value="submit" class="btn btn-primary">Send to editor</button>
+                    </div>
+                </form>
+                <form method="POST" action="{{ url_for('reporter_delete', story_id=story.id) }}"
+                      onsubmit="return confirm('Discard this item? This can\'t be undone.');" style="margin-top: 10px;">
+                    <button type="submit" class="btn btn-danger btn-small">Discard &mdash; not a real story</button>
+                </form>
+                {% else %}
+                <textarea rows="6" readonly>{{ story.draft }}</textarea>
+                {% endif %}
+            </div>
+        {% elif view == 'reporter' and story.status == 'IN_REVIEW' %}
+            <div class="panel panel-handoff">
+                <h2>Sent to editor</h2>
+                <p class="panel-hint">
+                    This brief is locked on your side now and waiting for an editor to rewrite and publish it.
+                    You can still fold in a duplicate below if one turns up.
+                </p>
+                {% if can_edit %}
+                <a href="{{ url_for('set_role', role='editor', next=url_for('editor_story', story_id=story.id)) }}"
+                   class="btn btn-primary">Switch to Editor &rarr;</a>
+                {% endif %}
+            </div>
+        {% elif view == 'reporter' and story.status == 'MERGED' %}
+            <div class="panel">
+                <h2>Draft</h2>
+                <textarea rows="6" readonly>{{ story.draft }}</textarea>
+                <p class="panel-hint">This item was merged into another story and is no longer edited on its own.</p>
+            </div>
+        {% elif view == 'editor' and story.status == 'IN_REVIEW' %}
+            <div class="panel">
+                <h2>Rewrite &amp; publish</h2>
+                {% if can_edit %}
+                <form method="POST" action="{{ url_for('publish', story_id=story.id) }}">
+                    <textarea name="final_text" rows="6">{{ story.draft }}</textarea>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">Publish</button>
+                    </div>
+                </form>
+                {% else %}
+                <textarea rows="6" readonly>{{ story.draft }}</textarea>
+                {% endif %}
+            </div>
+            {% if can_edit %}
+            <div class="panel panel-merge">
+                <h2>Not ready?</h2>
+                <p class="panel-hint">Send it back to the reporter desk instead of publishing. Say why so they know what to fix.</p>
+                <form method="POST" action="{{ url_for('reject', story_id=story.id) }}">
+                    <textarea name="note" rows="2" placeholder="e.g. needs a second source, tone is off, headline is misleading&hellip;"></textarea>
+                    <button type="submit" class="btn btn-secondary btn-block">Send back to reporter</button>
+                </form>
+            </div>
+            {% endif %}
+        {% elif view == 'editor' %}
+            <div class="panel">
+                <h2>Draft</h2>
+                <textarea rows="6" readonly>{{ story.draft }}</textarea>
+                <p class="panel-hint">
+                    {% if story.status == 'DRAFT' %}Still with the reporter &mdash; nothing to publish yet.
+                    {% elif story.status == 'MERGED' %}Merged into another story and no longer edited on its own.
+                    {% endif %}
+                </p>
+            </div>
+        {% endif %}
+
+        <div class="panel">
+            <h2>Sources <span class="count-badge">{{ sources|length }}</span></h2>
+            <ul class="source-list">
+                {% for source in sources %}
+                <li class="source-item {{ 'source-item-late' if source.added_after_publish else '' }}">
+                    <div class="source-item-head">
+                        <strong>{{ source.source }}</strong>
+                        {% if source.received_at %}<span class="source-time">{{ source.received_at[:16] }}</span>{% endif %}
+                        {% if source.added_after_publish %}<span class="late-badge">added after publish</span>{% endif %}
+                    </div>
+                    <p class="source-headline">{{ source.headline }}</p>
+                    <p class="source-content">{{ source.content }}</p>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        {% if log %}
+        <div class="panel">
+            <h2>Activity</h2>
+            <ul class="log-list">
+                {% for entry in log %}
+                <li>
+                    <span class="log-time">{{ entry.created_at[:16] }}</span>
+                    <span class="log-role">{{ entry.role }}</span>
+                    <span class="log-action">{{ entry.action.replace('_', ' ')|lower }}</span>
+                    {% if entry.detail %}<span class="log-detail">{{ entry.detail }}</span>{% endif %}
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+    </div>
+
+    <aside class="story-side">
+        {% if story.status != 'PUBLISHED' and story.status != 'MERGED' and other_stories and can_edit %}
+        <div class="panel panel-merge">
+            <h2>Same event as another story?</h2>
+            {% if view == 'reporter' %}
+                <p class="panel-hint">Fold another draft or in-review item into this one before it's sent on.</p>
+                <form method="POST" action="{{ url_for('reporter_attach', story_id=story.id) }}">
+                    <select name="other_story_id">
+                        {% for other in other_stories %}
+                        <option value="{{ other.id }}">{{ other.title }}</option>
+                        {% endfor %}
+                    </select>
+                    <button type="submit" class="btn btn-secondary btn-block">Combine into this story</button>
+                </form>
+            {% else %}
+                <p class="panel-hint">
+                    Merge with another story. If the other one is already published, this one's sources
+                    get attached there as an update &mdash; the published text won't change.
+                </p>
+                <form method="POST" action="{{ url_for('editor_merge') }}">
+                    <input type="hidden" name="absorb_id" value="{{ story.id }}">
+                    <select name="keep_id">
+                        {% for other in other_stories %}
+                        <option value="{{ other.id }}">{{ other.title }} {{ '(published)' if other.status == 'PUBLISHED' else '' }}</option>
+                        {% endfor %}
+                    </select>
+                    <button type="submit" class="btn btn-secondary btn-block">Merge into selected story</button>
+                </form>
+            {% endif %}
+        </div>
+        {% endif %}
+
+        {% if story.status == 'PUBLISHED' and other_stories and view == 'editor' and can_edit %}
+        <div class="panel panel-merge">
+            <h2>Duplicate turned up later?</h2>
+            <p class="panel-hint">Attach an in-review story here as a source without touching what's already live.</p>
+            <form method="POST" action="{{ url_for('editor_merge') }}">
+                <input type="hidden" name="keep_id" value="{{ story.id }}">
+                <select name="absorb_id">
+                    {% for other in other_stories if other.status != 'PUBLISHED' %}
+                    <option value="{{ other.id }}">{{ other.title }}</option>
+                    {% endfor %}
+                </select>
+                <button type="submit" class="btn btn-secondary btn-block">Attach as update</button>
+            </form>
+        </div>
+        {% endif %}
+    </aside>
+</div>
+{% endblock %}

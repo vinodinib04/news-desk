@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}News Brief Desk{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <header class="navbar">
+        <div class="navbar-container">
+            <a href="/" class="logo">News Brief Desk</a>
+
+            <nav class="navigation">
+                <a href="{{ url_for('reporter') }}" class="{{ 'active' if request.path.startswith('/reporter') else '' }}">Reporter desk</a>
+                <a href="{{ url_for('editor') }}" class="{{ 'active' if request.path.startswith('/editor') else '' }}">Editor desk</a>
+                <a href="{{ url_for('dashboard') }}" class="{{ 'active' if request.path.startswith('/dashboard') else '' }}">Desk head report</a>
+            </nav>
+
+            <div class="role-switch">
+                <span class="role-label">Acting as</span>
+                {% for role in ['reporter', 'editor', 'desk_head'] %}
+                    <a href="{{ url_for('set_role', role=role) }}"
+                       class="role-pill {{ 'is-current' if current_role == role else '' }}">
+                        {{ role.replace('_', ' ')|title }}
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+    </header>
+
+    <main>
+        {% if desk_role and current_role != desk_role %}
+        <div class="role-banner">
+            You're browsing the <strong>{{ desk_role.replace('_', ' ')|title }}</strong> desk while acting as
+            <strong>{{ current_role.replace('_', ' ')|title }}</strong> &mdash; viewing only, no editing here.
+            <a href="{{ url_for('set_role', role=desk_role, next=request.path) }}">Switch to {{ desk_role.replace('_', ' ')|title }} &rarr;</a>
+        </div>
+        {% endif %}
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-stack">
+                    {% for category, message in messages %}
+                        <div class="flash flash-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        <p>News Brief Desk &middot; editorial workflow prototype</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
