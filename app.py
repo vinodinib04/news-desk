@@ -98,7 +98,9 @@ def generate_draft(sources):
 
 def seed_database_if_empty():
     connection = get_connection()
-    existing = connection.execute("SELECT COUNT(*) AS count FROM stories").fetchone()
+    existing = connection.execute(
+        "SELECT COUNT(*) AS count FROM stories"
+    ).fetchone()
 
     if existing["count"] > 0:
         connection.close()
@@ -112,7 +114,10 @@ def seed_database_if_empty():
         title = first["headline"]
         category = detect_category(first["headline"], first["content"])
         draft = generate_draft(group)
-        created_at = min(item.get("received_at", datetime.now().isoformat()) for item in group)
+        created_at = min(
+            item.get("received_at", datetime.now().isoformat())
+            for item in group
+        )
 
         cursor = connection.execute(
             """
@@ -126,19 +131,29 @@ def seed_database_if_empty():
         for item in group:
             connection.execute(
                 """
-                INSERT INTO story_sources (story_id, source, headline, content, received_at)
+                INSERT INTO story_sources
+                (story_id, source, headline, content, received_at)
                 VALUES (?, ?, ?, ?, ?)
                 """,
-                (story_id, item["source"], item["headline"], item["content"], item.get("received_at")),
+                (
+                    story_id,
+                    item["source"],
+                    item["headline"],
+                    item["content"],
+                    item.get("received_at"),
+                ),
             )
 
-        log_activity(connection, story_id, "system", "GROUPED",
-                     f"{len(group)} incoming item(s) grouped automatically.")
+        log_activity(
+            connection,
+            story_id,
+            "system",
+            "GROUPED",
+            f"{len(group)} incoming item(s) grouped automatically.",
+        )
 
     connection.commit()
     connection.close()
-
-
 initialize_database()
 seed_database_if_empty()
 
