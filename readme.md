@@ -6,7 +6,7 @@ A newsroom workflow prototype that helps a small news desk turn incoming raw new
 
 **Deployed Application:** https://news-desk-bhhv.onrender.com/
 
-**Demo Video:** [ADD YOUR VIDEO URL]
+**Demo Video:** https://www.loom.com/share/9c3e41a4553e4f96a1d07a589e34fc29
 
 
 ## Overview
